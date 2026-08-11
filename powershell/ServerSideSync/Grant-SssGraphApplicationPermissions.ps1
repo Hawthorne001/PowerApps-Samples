@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
 Configures and grants consent for all Microsoft Graph application permissions
-required by the cross-tenant SSS workload.
+required for synching emails from Exchange online mailboxes into another Tenant's dataverse.
 
 .DESCRIPTION
 Adds the complete Graph application-permission set to an existing Microsoft
@@ -13,15 +13,12 @@ Contacts.ReadWrite, MailboxSettings.ReadWrite, Tasks.ReadWrite.All,
 Chat.Read.All, OnlineMeetings.ReadWrite.All, CallRecords.Read.All,
 MailboxConfigItem.ReadWrite, and User.Read.All. There are no workload switches.
 
-PREREQUISITES
-
-Before running the script:
+PreRequisites:
 1. Install Microsoft Graph PowerShell:
    Install-Module Microsoft.Graph -Scope CurrentUser
-2. Sign in with an activated Privileged Role Administrator or Global
+2. Sign in with an activated Global
    Administrator role.
-3. Confirm that both the app registration and its enterprise application
-   already exist in the target tenant.
+3. Confirm that the application is already created in the MSFT tenant.
 
 Use -WhatIf first to review the proposed changes. The script prompts for
 confirmation before changing the app registration and before granting each
