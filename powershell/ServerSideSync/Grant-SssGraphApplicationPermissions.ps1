@@ -22,7 +22,8 @@ PreRequisites:
 
 Use -WhatIf first to review the proposed changes. The script prompts for
 confirmation before changing the app registration and before granting each
-permission.
+permission. Every run writes a timestamped PowerShell transcript under the
+same directory as this script.
 
 .PARAMETER TenantId
 The Microsoft Entra tenant ID containing the app registration and Exchange
@@ -64,6 +65,17 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$transcriptTimestamp = (Get-Date).ToUniversalTime().ToString("yyyyMMdd-HHmmss")
+$transcriptPath = Join-Path $PSScriptRoot (
+    "Grant-SssGraphApplicationPermissions-{0}-{1}.log" -f
+        $transcriptTimestamp,
+        $PID
+)
+
+Start-Transcript -Path $transcriptPath -IncludeInvocationHeader
+Write-Host "Transcript: $transcriptPath"
+
+try {
 $graphAppId = "00000003-0000-0000-c000-000000000000"
 $requiredPermissions = @(
     "Mail.ReadWrite"
@@ -260,4 +272,8 @@ $results | Sort-Object Permission | Format-Table -AutoSize
 
 if ($results.Consented -contains $false -and -not $WhatIfPreference) {
     throw "One or more permissions were not granted."
+}
+}
+finally {
+    Stop-Transcript
 }
